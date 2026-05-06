@@ -1,23 +1,40 @@
 import pandas as pd
 import os
+import logging
 
-# Ensure output directory exists
-os.makedirs("output", exist_ok=True)
 
-print("Loading data...")
-df = pd.read_parquet("data/sample_data.parquet")
+try:
+    logging.basicConfig(level=logging.INFO)
+    logging.info("Starting report generation...")
 
-print("Processing data...")
-df["revenue"] = df["price"] * df["qty"]
+    # Ensure output directory exists
+    os.makedirs("output", exist_ok=True)
 
-# Compute summary
-summary = df.groupby("category").agg(
-    total_revenue=("revenue", "sum"),
-    total_quantity=("qty", "sum"),
-    avg_price=("price", "mean")
-).reset_index()
+    print("Loading data...")
+    logging.info("Loading data...")
 
-print("Saving report...")
-summary.to_csv("output/report.csv", index=False)
+    df = pd.read_parquet("data/sample_data.parquet")
 
-print("✅ Report generated at output/report.csv")
+    print("Processing data...")
+    logging.info("Processing data...")
+    df["revenue"] = df["price"] * df["qty"]
+
+    # Compute summary
+    summary = df.groupby("category").agg(
+        total_revenue=("revenue", "sum"),
+        total_quantity=("qty", "sum"),
+        avg_price=("price", "mean"),
+        transaction_count=("qty", "count")
+    ).reset_index()
+
+    print("Saving report...")
+    logging.info("Saving report...")
+    summary.to_csv("output/report.csv", index=False)
+
+    print("✅ Report generated at output/report.csv")
+    print("Report generation completed successfully.")
+
+except Exception as e:
+    logging.error(f"An error occurred: {e}")
+    print(f"❌ An error occurred: {e}")
+
