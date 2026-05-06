@@ -37,17 +37,23 @@ try:
 
 #    print("Saving report...")
     logging.info("Saving report...")
-    summary.to_csv("output/report.csv", index=False)
+    #summary.to_csv("output/report.csv", index=False)
     summary.to_json("output/report.json", orient="records")
     summary.to_parquet("output/report.parquet")
 
-    
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
     summary.to_csv(f"output/report_{timestamp}.csv", index=False)
 
 
   #  print("✅ Report generated at output/report.csv")
     logging.info("Report generation completed successfully.")
+    logging.info("generating log file...")
+    logging.basicConfig(
+    filename="output/pipeline.log",
+    level=logging.INFO
+    )
+
 
 except Exception as e:
     logging.error(f"An error occurred: {e}")
