@@ -14,7 +14,7 @@ try:
     logging.info("Loading data...")
 
     df = pd.read_parquet("data/sample_data.parquet")
-    df.loc[0, "price"] = -10.0  # Forzamos un valor negativo para probar el error
+    #df.loc[0, "price"] = -10.0 Ha ido y ha saltado el error en la pipeline
 
     print("Processing data...")
     logging.info("Processing data...")
