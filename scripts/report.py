@@ -14,9 +14,15 @@ try:
     logging.info("Loading data...")
 
     df = pd.read_parquet("data/sample_data.parquet")
+    df.loc[0, "price"] = -10.0  # Forzamos un valor negativo para probar el error
 
     print("Processing data...")
     logging.info("Processing data...")
+
+    if (df["price"] < 0).any():
+        raise ValueError("Price cannot be negative.")
+    
+
     df["revenue"] = df["price"] * df["qty"]
 
     # Compute summary
